@@ -1,6 +1,11 @@
 # spring-social-kakao
 spring-social-facebook 을 모방하여 만든 kakao api 호출을 위한 library.
 
+2017.08.24
+------------------------------------------------------
+- Add optional email field to KakaoProfile  
+- Add null check when the returned profile does not contain properties (in case of developer type Kakao account)
+
 추가 작업 필요 항목
 ------------------------------------------------------
 - 이미지 파일 업로드 시 n개의 파일 업로드 과정에 gif animation 파일이 포함 되었을때 gif animation 파일을 제외한 나머지 파일 필터링
