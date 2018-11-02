@@ -12,11 +12,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.social.kakao.api.AccessTokenInfo;
 import org.springframework.social.kakao.api.ForApns;
 import org.springframework.social.kakao.api.ForGcm;
 import org.springframework.social.kakao.api.Kakao;
+import org.springframework.social.kakao.api.KakaoFriends;
+import org.springframework.social.kakao.api.KakaoFriends.Element;
 import org.springframework.social.kakao.api.KakaoIds;
 import org.springframework.social.kakao.api.KakaoProfile;
 import org.springframework.social.kakao.api.KakaoStoryProfile;
@@ -37,8 +41,8 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class KakaoTemplateTest {
-	static final String ACCESS_TOKEN = "access token"; //insert access token
-	static final String ADMIN_KEY = "admin key"; //insert admin key
+	static final String ACCESS_TOKEN = ""; //insert access token
+	static final String ADMIN_KEY = ""; //insert admin key
 	static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	
 	Kakao kakao;
@@ -56,6 +60,42 @@ public class KakaoTemplateTest {
 		photoFileList.add("D:\\sample_photo\\4.jpg");
 		photoFileList.add("D:\\sample_photo\\5.jpg");
 		storyPhotoUpload.setFilePathList(photoFileList);
+	}
+	
+	@Test
+	public void getFriendList() {
+		//kakao
+		System.out.println("********************************************************");
+		System.out.println("** Kakao operation");
+		System.out.println("********************************************************");
+		KakaoFriends friends = kakao.friendsOperation().getFriendList();
+		System.out.println(friends.getTotal_count());
+		System.out.println("********************************************************");
+		System.out.println("friend list ");
+		for(Element ele : friends.getElements()) {
+			System.out.println(ele.getId());
+			System.out.println(ele.getProfile_nickname());
+			System.out.println(ele.getProfile_thumbnail_image());
+		}
+		System.out.println("********************************************************");
+	}
+	
+	@Test
+	public void getFriendListCustom() {
+		//kakao
+		System.out.println("********************************************************");
+		System.out.println("** Kakao operation");
+		System.out.println("********************************************************");
+		KakaoFriends friends = kakao.friendsOperation().getFriendList(true, 0, 10, "desc");
+		System.out.println(friends.getTotal_count());
+		System.out.println("********************************************************");
+		System.out.println("friend list ");
+		for(Element ele : friends.getElements()) {
+			System.out.println(ele.getId());
+			System.out.println(ele.getProfile_nickname());
+			System.out.println(ele.getProfile_thumbnail_image());
+		}
+		System.out.println("********************************************************");
 	}
 	
 	@Test
@@ -128,8 +168,8 @@ public class KakaoTemplateTest {
 		System.out.println("** Story note posting operation");
 		System.out.println("********************************************************");
 		StoryNotePosting storyNotePosting = new StoryNotePosting();
-		StringBuilder sbNoteContent = new StringBuilder("Kakao rest api library °³¹ß Å×½ºÆ®(spring social kakao).\r\n")
-			.append("\r\nÅ×½ºÆ® ½Ã°£ : ").append(DATE_FORMAT.format(new Date()));
+		StringBuilder sbNoteContent = new StringBuilder("Kakao rest api library ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®(spring social kakao).\r\n")
+			.append("\r\nï¿½×½ï¿½Æ® ï¿½Ã°ï¿½ : ").append(DATE_FORMAT.format(new Date()));
 		storyNotePosting.setContent(sbNoteContent.toString());
 		
 		StoryPostingResult notePostingResult = kakao.storyOperation().postNote(storyNotePosting);
@@ -170,9 +210,9 @@ public class KakaoTemplateTest {
 		
 		storyLinkPosting.setStoryLinkInfo(storyLinkInfo);
 		
-		StringBuilder sbLinkContent = new StringBuilder("Kakao rest api library °³¹ß Å×½ºÆ®(spring social kakao).\r\n")
-			.append("kakao linkinfo rest api È£Ãâ °á°ú °´Ã¼ ¼ÂÆÃ Å×½ºÆ®\r\n")
-			.append("\r\nÅ×½ºÆ® ½Ã°£ : ").append(DATE_FORMAT.format(new Date()));
+		StringBuilder sbLinkContent = new StringBuilder("Kakao rest api library ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®(spring social kakao).\r\n")
+			.append("kakao linkinfo rest api È£ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®\r\n")
+			.append("\r\nï¿½×½ï¿½Æ® ï¿½Ã°ï¿½ : ").append(DATE_FORMAT.format(new Date()));
 		storyLinkPosting.setContent(sbLinkContent.toString());
 		
 		StoryPostingResult linkResult = kakao.storyOperation().postLink(storyLinkPosting);
@@ -190,9 +230,9 @@ public class KakaoTemplateTest {
 		
 		storyLinkPostingWithURL.setUrl("https://github.com/bongki/spring-social-kakao");
 		
-		StringBuilder sbLinkWithURLContent = new StringBuilder("Kakao rest api library °³¹ß Å×½ºÆ®(spring social kakao).\r\n")
-			.append("url ¼³Á¤(kakao linkinfo rest api È£Ãâ ³»ºÎ Ã³¸®) Å×½ºÆ®\r\n")
-			.append("\r\nÅ×½ºÆ® ½Ã°£ : ").append(DATE_FORMAT.format(new Date()));
+		StringBuilder sbLinkWithURLContent = new StringBuilder("Kakao rest api library ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®(spring social kakao).\r\n")
+			.append("url ï¿½ï¿½ï¿½ï¿½(kakao linkinfo rest api È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½) ï¿½×½ï¿½Æ®\r\n")
+			.append("\r\nï¿½×½ï¿½Æ® ï¿½Ã°ï¿½ : ").append(DATE_FORMAT.format(new Date()));
 		storyLinkPostingWithURL.setContent(sbLinkWithURLContent.toString());
 		
 		StoryPostingResult linkWithURLResult = kakao.storyOperation().postLink(storyLinkPostingWithURL);
@@ -216,9 +256,9 @@ public class KakaoTemplateTest {
 		System.out.println("********************************************************");
 		StoryPhotoPosting storyPhotoPosting = new StoryPhotoPosting();
 		storyPhotoPosting.setImageUrlList(imageUrlList);
-		StringBuilder sbPhotoContent = new StringBuilder("Kakao rest api library °³¹ß Å×½ºÆ®(spring social kakao).\r\n")
-			.append("kakao multi rest api È£Ãâ °á°ú °´Ã¼ ¼ÂÆÃ Å×½ºÆ®\r\n")
-			.append("\r\nÅ×½ºÆ® ½Ã°£ : ").append(DATE_FORMAT.format(new Date()));
+		StringBuilder sbPhotoContent = new StringBuilder("Kakao rest api library ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®(spring social kakao).\r\n")
+			.append("kakao multi rest api È£ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®\r\n")
+			.append("\r\nï¿½×½ï¿½Æ® ï¿½Ã°ï¿½ : ").append(DATE_FORMAT.format(new Date()));
 		storyPhotoPosting.setContent(sbPhotoContent.toString());
 		StoryPostingResult photoResult = kakao.storyOperation().postPhoto(storyPhotoPosting);
 		System.out.println(String.format("** photo article id : %s", photoResult.getId()));
@@ -232,9 +272,9 @@ public class KakaoTemplateTest {
 		System.out.println("********************************************************");
 		StoryPhotoPosting storyPhotoPosting = new StoryPhotoPosting();
 		storyPhotoPosting.setStoryPhotoUpload(storyPhotoUpload);
-		StringBuilder sbPhotoContent = new StringBuilder("Kakao rest api library °³¹ß Å×½ºÆ®(spring social kakao).\r\n")
-			.append("kakao multi rest api ³»ºÎ Ã³¸® Å×½ºÆ®\r\n")
-			.append("\r\nÅ×½ºÆ® ½Ã°£ : ").append(DATE_FORMAT.format(new Date()));
+		StringBuilder sbPhotoContent = new StringBuilder("Kakao rest api library ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®(spring social kakao).\r\n")
+			.append("kakao multi rest api ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½×½ï¿½Æ®\r\n")
+			.append("\r\nï¿½×½ï¿½Æ® ï¿½Ã°ï¿½ : ").append(DATE_FORMAT.format(new Date()));
 		storyPhotoPosting.setContent(sbPhotoContent.toString());
 		StoryPostingResult photoResult = kakao.storyOperation().postPhoto(storyPhotoPosting);
 		System.out.println(String.format("** photo article id : %s", photoResult.getId()));
@@ -286,8 +326,40 @@ public class KakaoTemplateTest {
 		System.out.println("** Kakao rest api access token infomation check");
 		System.out.println("********************************************************");
 		try {
-			AccessTokenInfo accessTokenInfo = kakao.userOperation().accessTokenInfo();
-			System.out.println(accessTokenInfo.toJsonString(true));
+			ResponseEntity<AccessTokenInfo> accessTokenInfo = kakao.userOperation().accessTokenInfo(ACCESS_TOKEN);
+			System.out.println(accessTokenInfo.getStatusCode());
+			System.out.println(accessTokenInfo.getStatusCode() == HttpStatus.OK);
+			System.out.println(accessTokenInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("********************************************************");
+	}
+	
+//	@Test
+//	public void unlink() {
+//		System.out.println("********************************************************");
+//		System.out.println("** Kakao rest api access token infomation check");
+//		System.out.println("********************************************************");
+//		try {
+//			
+//			KakaoProfile unlink = kakao.userOperation().unlink("892232457");
+//			System.out.println(unlink);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println("********************************************************");
+//	}
+	
+	@Test
+	public void unlink() {
+		System.out.println("********************************************************");
+		System.out.println("** Kakao rest api access token infomation check");
+		System.out.println("********************************************************");
+		try {
+			
+			KakaoProfile unlink = kakao.userOperation().unlink("915319450");
+			System.out.println(unlink);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -34,4 +34,12 @@ public interface Kakao extends ApiBinding {
 	 * @return
 	 */
 	PushOperation pushOperation();
+	
+	/**
+	 * <pre>
+	 * 친구목록 API 호출
+	 * </pre>
+	 * @return
+	 */
+	FriendsOperation friendsOperation();
 }

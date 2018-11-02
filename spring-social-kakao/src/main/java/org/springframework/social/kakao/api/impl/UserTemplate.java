@@ -1,5 +1,12 @@
 package org.springframework.social.kakao.api.impl;
 
+import java.util.Arrays;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.social.kakao.api.AccessTokenInfo;
 import org.springframework.social.kakao.api.KakaoIds;
 import org.springframework.social.kakao.api.KakaoProfile;
@@ -34,16 +41,29 @@ public class UserTemplate extends AbstractKakaoOperations implements UserOperati
 		return restTemplate.getForObject(buildApiUri("/v1/user/me"), KakaoProfile.class);
 	}
 	
-	public KakaoProfile unlink() {
+	public KakaoProfile unlink(String userId) {
 		requireAuthorization();
 		
-		return restTemplate.postForObject(buildApiUri("/v1/user/unlink"), null, KakaoProfile.class);
+		MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
+		param.set("target_id_type", "user_id");
+		param.set("target_id", userId);
+		
+		return restTemplate.postForObject(buildApiUri("/v1/user/unlink"), param, KakaoProfile.class);
 	}
 	
-	public AccessTokenInfo accessTokenInfo() {
+	public ResponseEntity<AccessTokenInfo> accessTokenInfo(String profileJsonString) {
 		requireAuthorization();
 		
-		return restTemplate.getForObject(buildApiUri("/v1/user/access_token_info"), AccessTokenInfo.class);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		headers.setAccept(Arrays.asList(new MediaType[]{MediaType.ALL}));
+		headers.set("Authorization", "Bearer " + profileJsonString);
+		HttpEntity requestEntity =  new  HttpEntity ( MediaType.APPLICATION_FORM_URLENCODED_VALUE, headers);
+		
+		MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
+		param.set("properties", profileJsonString);
+		
+		return restTemplate.exchange(buildApiUri("/v1/user/access_token_info"), HttpMethod.GET, requestEntity, AccessTokenInfo.class);
 	}
 	
 	public KakaoProfile updateProfile(String profileJsonString) {

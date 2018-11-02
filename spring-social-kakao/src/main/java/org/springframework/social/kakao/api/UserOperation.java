@@ -1,5 +1,7 @@
 package org.springframework.social.kakao.api;
 
+import org.springframework.http.ResponseEntity;
+
 public interface UserOperation {
 	/**
 	 * <pre>
@@ -32,7 +34,7 @@ public interface UserOperation {
 	 * </pre> 
 	 * @return
 	 */
-	KakaoProfile unlink();
+	KakaoProfile unlink(String userId);
 	
 	/**
 	 * <pre>
@@ -41,7 +43,7 @@ public interface UserOperation {
 	 * </pre>
 	 * @return
 	 */
-	AccessTokenInfo accessTokenInfo();
+	ResponseEntity<AccessTokenInfo> accessTokenInfo(String profileJsonString);
 	
 	/**
 	 * <pre>

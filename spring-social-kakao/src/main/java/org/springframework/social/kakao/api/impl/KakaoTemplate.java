@@ -8,6 +8,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.social.kakao.api.FriendsOperation;
 import org.springframework.social.kakao.api.Kakao;
 import org.springframework.social.kakao.api.PushOperation;
 import org.springframework.social.kakao.api.StoryOperation;
@@ -23,6 +24,7 @@ public class KakaoTemplate extends AbstractOAuth2ApiBinding implements Kakao {
 	private StoryOperation storyOperation;
 	private TalkOperation talkOperation;
 	private PushOperation pushOperation;
+	private FriendsOperation friendsOperation;
 
 	private String adminKey;
 	private RestTemplate adminRestTemplate;
@@ -31,7 +33,6 @@ public class KakaoTemplate extends AbstractOAuth2ApiBinding implements Kakao {
 		initialize();
 	}
 
-	@Deprecated
 	public KakaoTemplate(String accessToken) {
 		super(accessToken);
 		initialize();
@@ -63,6 +64,10 @@ public class KakaoTemplate extends AbstractOAuth2ApiBinding implements Kakao {
 	public PushOperation pushOperation() {
 		return pushOperation;
 	}
+	
+	public FriendsOperation friendsOperation() {
+		return friendsOperation;
+	}
 
 	private void initialize() {
 		super.setRequestFactory(ClientHttpRequestFactorySelector.bufferRequests(getRestTemplate().getRequestFactory()));
@@ -79,6 +84,7 @@ public class KakaoTemplate extends AbstractOAuth2ApiBinding implements Kakao {
 		storyOperation = new StoryTemplate(getRestTemplate(), isAuthorized());
 		talkOperation = new TalkTemplate(getRestTemplate(), isAuthorized());
 		pushOperation = new PushTemplate(adminRestTemplate, isAuthorized());
+		friendsOperation = new FriendsTemplate(getRestTemplate(),adminRestTemplate, isAuthorized());
 	}
 
 	/**
@@ -97,4 +103,5 @@ public class KakaoTemplate extends AbstractOAuth2ApiBinding implements Kakao {
 			return execution.execute(protectedResourceRequest, body);
 		}
 	}
+
 }
