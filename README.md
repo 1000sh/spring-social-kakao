@@ -1,6 +1,12 @@
 # spring-social-kakao
 spring-social-facebook 을 모방하여 만든 kakao api 호출을 위한 library.
 
+
+2018.11.02
+------------------------------------------------------
+- 친구 api 추가
+- 회원정보 unlink 수정
+
 2017.08.24
 ------------------------------------------------------
 - Add optional email field to KakaoProfile  
